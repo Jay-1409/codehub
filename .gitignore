@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Editor and local tool metadata
+.vscode/
+.codehub/
+
+# OS files
+.DS_Store

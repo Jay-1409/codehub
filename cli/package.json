@@ -1,0 +1,19 @@
+{
+  "name": "codehub-cli",
+  "version": "1.0.0",
+  "description": "CLI for CodeHub",
+  "main": "bin/codehub.js",
+  "type": "module",
+  "bin": {
+    "codehub": "./bin/codehub.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "chalk": "^4.1.2",
+    "commander": "^13.1.0",
+    "configstore": "^8.0.0"
+  }
+}
