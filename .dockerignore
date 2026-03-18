@@ -1,0 +1,11 @@
+node_modules
+npm-debug.log
+.env
+.git
+.gitignore
+*.md
+dist
+my-new-repo-fork-forkeed
+my-test-project
+repositories
+.vscode

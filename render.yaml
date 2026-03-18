@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: dbms-project
+    env: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_CONNECTSTRING
+        sync: false
+      - key: NODE_ENV
+        value: production

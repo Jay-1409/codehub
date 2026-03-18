@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import "./styles.css";
+import DocsPage from "./DocsPage";
 
 /* ─────────────────────────────────────────────
    Constants & Pure Helpers
@@ -564,6 +565,8 @@ function SectionCard({ id, label, collapsed, onToggle, children }) {
    Main App
 ───────────────────────────────────────────── */
 export default function App() {
+  const [showDocs, setShowDocs] = useState(false);
+
   /* Theme state */
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem("theme") === "dark";
@@ -1587,6 +1590,12 @@ export default function App() {
           </div>
           <div className="nav-right">
             <button
+              className="btn btn-soft btn-sm"
+              onClick={() => setShowDocs((prev) => !prev)}
+            >
+              {showDocs ? "Close Docs" : "Docs"}
+            </button>
+            <button
               className="btn btn-ghost btn-sm"
               onClick={toggleDarkMode}
               title="Toggle Dark Mode"
@@ -1606,7 +1615,9 @@ export default function App() {
         {/* ══════════════════════════════════════
             AUTH PAGE
         ══════════════════════════════════════ */}
-        {!showDashboard && (
+        {showDocs ? (
+          <DocsPage onClose={() => setShowDocs(false)} />
+        ) : !showDashboard && (
           <div className="auth-page">
             {/* Hero */}
             <div className="auth-hero">
@@ -1761,7 +1772,7 @@ export default function App() {
         {/* ══════════════════════════════════════
             DASHBOARD
         ══════════════════════════════════════ */}
-        {showDashboard && (
+        {!showDocs && showDashboard && (
           <div className="dashboard">
             {/* ── Top bar ── */}
             <div className="dash-topbar">
