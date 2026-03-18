@@ -8,7 +8,8 @@ on:
 jobs:
   ping:
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       - name: Ping Render App
         run: |
-          curl -I https://codehub-9j60.onrender.com/api/health
+          curl -f -I --max-time 30 https://codehub-9j60.onrender.com/api/health
