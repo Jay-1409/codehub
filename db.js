@@ -53,7 +53,7 @@ function resolveOracleLibDir() {
     return undefined;
 }
 
-const oracleDriverMode = (process.env.ORACLE_DRIVER_MODE || 'auto').toLowerCase();
+const oracleDriverMode = (process.env.ORACLE_DRIVER_MODE || 'thin').toLowerCase();
 
 // Prefer thick mode when available, but don't crash startup in auto mode.
 if (oracleDriverMode !== 'thin') {

@@ -6,6 +6,14 @@ ORACLE_DIR="$ROOT_DIR/.render/oracle"
 ZIP_URL="https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-basic-linux.x64-23.8.0.25.04.zip"
 ZIP_PATH="$ORACLE_DIR/instantclient-basic.zip"
 STABLE_LINK="$ORACLE_DIR/instantclient"
+ORACLE_DRIVER_MODE="${ORACLE_DRIVER_MODE:-thin}"
+
+if [ "$ORACLE_DRIVER_MODE" != "thick" ]; then
+  echo "ORACLE_DRIVER_MODE=$ORACLE_DRIVER_MODE -> skipping Oracle Instant Client setup (Thin mode)."
+  npm ci --include=dev
+  npm run build
+  exit 0
+fi
 
 mkdir -p "$ORACLE_DIR"
 
@@ -48,5 +56,5 @@ if [ ! -f "$STABLE_LINK/libclntsh.so" ] || [ ! -f "$STABLE_LINK/libnnz.so" ]; th
   exit 1
 fi
 
-npm ci
+npm ci --include=dev
 npm run build
