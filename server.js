@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 5089;
 const DIST_DIR = path.join(__dirname, 'dist');
 const DIST_INDEX = path.join(DIST_DIR, 'index.html');
 
-const allowedOrigins = (process.env.CORS_ORIGINS || 'http://localhost:5173,http://localhost:5080')
+const allowedOrigins = (process.env.CORS_ORIGINS || 'http://localhost:5173,http://localhost:5080,https://codehub.jclouds.space/')
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean);
