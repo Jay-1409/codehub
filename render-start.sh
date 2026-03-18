@@ -3,7 +3,14 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
 DEFAULT_IC_DIR="$ROOT_DIR/.render/oracle/instantclient"
+SYSLIB_DIR="$ROOT_DIR/.render/oracle/syslib"
 IC_DIR="${INSTANT_CLIENT_PATH:-$DEFAULT_IC_DIR}"
+ORACLE_DRIVER_MODE="${ORACLE_DRIVER_MODE:-thin}"
+
+if [ "$ORACLE_DRIVER_MODE" != "thick" ]; then
+  echo "ORACLE_DRIVER_MODE=$ORACLE_DRIVER_MODE -> starting in Thin mode."
+  exec node server.js
+fi
 
 if [ -d "$IC_DIR" ]; then
   if [ ! -f "$IC_DIR/libclntsh.so" ]; then
@@ -27,7 +34,16 @@ if [ -d "$IC_DIR" ]; then
   fi
 
   export INSTANT_CLIENT_PATH="$IC_DIR"
-  export LD_LIBRARY_PATH="$IC_DIR${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+  if [ -d "$SYSLIB_DIR" ]; then
+    export LD_LIBRARY_PATH="$IC_DIR:$SYSLIB_DIR${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+  else
+    export LD_LIBRARY_PATH="$IC_DIR${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+  fi
+
+  if command -v ldd >/dev/null 2>&1; then
+    echo "Checking Oracle client dependencies..."
+    ldd "$IC_DIR/libclntsh.so" | grep "not found" || true
+  fi
 fi
 
 exec node server.js
