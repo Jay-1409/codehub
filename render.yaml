@@ -2,8 +2,8 @@ services:
   - type: web
     name: dbms-project
     env: node
-    buildCommand: bash ./render-native-build.sh
-    startCommand: node server.js
+    buildCommand: npm run render:build
+    startCommand: bash -lc 'export LD_LIBRARY_PATH="${INSTANT_CLIENT_PATH}:${LD_LIBRARY_PATH:-}"; node server.js'
     envVars:
       - key: DB_USER
         sync: false
@@ -12,6 +12,8 @@ services:
       - key: DB_CONNECTSTRING
         sync: false
       - key: INSTANT_CLIENT_PATH
-        value: /opt/render/project/src/.render/oracle/instantclient_23_8
+        value: /opt/render/project/src/.render/oracle/instantclient
+      - key: LD_LIBRARY_PATH
+        value: /opt/render/project/src/.render/oracle/instantclient
       - key: NODE_ENV
         value: production
