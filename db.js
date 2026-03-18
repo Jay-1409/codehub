@@ -71,13 +71,15 @@ if (oracleDriverMode !== 'thin') {
         }
     } catch (err) {
         const isClientLibError = err && err.code === 'DPI-1047';
-        if (oracleDriverMode === 'thick' || !isClientLibError) {
+        if (!isClientLibError) {
             console.error('Thick mode initialization error. Ensure Oracle Instant Client is installed.');
             console.error('Download from: https://www.oracle.com/database/technologies/instant-client/downloads.html');
             console.error('Set INSTANT_CLIENT_PATH to the folder containing libclntsh.*');
             throw err;
         }
 
+        // On Render native runtimes, missing native deps (e.g. libaio/libnnz) are common.
+        // Do not crash process startup; continue with thin mode.
         console.warn(`Oracle driver fallback to thin mode: ${err.message}`);
     }
 }
