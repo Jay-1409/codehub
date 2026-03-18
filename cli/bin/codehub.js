@@ -11,10 +11,36 @@ import readline from 'readline';
 // Configstore to save JWT token locally (~/.config/configstore/codehub-cli.json)
 const config = new Configstore('codehub-cli');
 
-// FIX: Avoid hardcoded API endpoint so CLI works across environments/ports.
-const API_BASE = process.env.CODEHUB_API_URL || 'http://localhost:5080/api';
+
+// === HARDCODED SERVER URL ===
+const API_BASE = 'https://codehub.jclouds.space/api'; // <-- Set your server URL here
+
+// The rest of the code will always use this API_BASE, ignoring env/config.
 
 function getErrorMessage(err) {
+    if (err?.response) {
+        const status = err.response.status;
+        const payload = err.response.data;
+        if (payload && typeof payload === 'object') {
+            if (typeof payload.error === 'string') return `[HTTP ${status}] ${payload.error}`;
+            if (payload.error?.message) return `[HTTP ${status}] ${payload.error.message}`;
+            if (typeof payload.message === 'string') return `[HTTP ${status}] ${payload.message}`;
+            try {
+                return `[HTTP ${status}] ${JSON.stringify(payload)}`;
+            } catch {
+                return `[HTTP ${status}] Request failed`;
+            }
+        }
+        if (typeof payload === 'string' && payload.trim()) {
+            return `[HTTP ${status}] ${payload.slice(0, 300)}`;
+        }
+        return `[HTTP ${status}] Request failed`;
+    }
+
+    if (err?.request) {
+        return `No response from API at ${API_BASE}. Set CODEHUB_API_URL if needed.`;
+    }
+
     const payload = err?.response?.data;
     if (!payload) return err?.message || 'Unknown error';
     if (typeof payload.error === 'string') return payload.error;
@@ -85,6 +111,9 @@ program
     .description('CLI tool for CodeHub - A GitHub Alternative')
     .version('1.0.0');
 
+
+// Removed set-api and show-api commands: API endpoint is now hardcoded.
+
 // ==================== SIGNUP ====================
 program
     .command('signup')
@@ -118,6 +147,10 @@ program
 
         try {
             const res = await axios.post(`${API_BASE}/auth/login`, { username, password });
+
+            if (!res?.data?.token || !res?.data?.user) {
+                throw new Error(`Unexpected login response from ${API_BASE}/auth/login`);
+            }
 
             // Save token and user details mapping locally
             config.set('token', res.data.token);

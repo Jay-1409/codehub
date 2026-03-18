@@ -57,6 +57,15 @@ export CODEHUB_API_URL="http://your-server-url.com/api"
 $env:CODEHUB_API_URL="http://your-server-url.com/api"
 ```
 
+To avoid setting environment variables every time, users can save the endpoint once in CLI config:
+
+```bash
+codehub set-api https://your-server-url.com
+codehub show-api
+```
+
+`set-api` automatically normalizes the URL to include `/api`.
+
 ### 3. Authentication
 
 Before creating or modifying repositories, you need to authenticate.
