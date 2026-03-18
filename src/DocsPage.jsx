@@ -10,8 +10,8 @@ const tocItems = [
 const quickStartSteps = [
   {
     title: "Install CLI",
-    detail: "Install once globally from the project cli directory.",
-    command: "cd cli && npm install -g .",
+    detail: "Install once globally from npm.",
+    command: "npm install -g @jay_shah/codehub-cli",
   },
   {
     title: "Create account and log in",
@@ -62,11 +62,6 @@ const webFlow = [
 ];
 
 const troubleshooting = [
-  {
-    issue: "CLI points to wrong API",
-    fix: "Set CODEHUB_API_URL to your deployed server API endpoint.",
-    command: "export CODEHUB_API_URL=https://your-server/api",
-  },
   {
     issue: "Authentication errors",
     fix: "Re-authenticate and retry the command.",
@@ -138,6 +133,14 @@ const hostingEnvVars = [
   },
 ];
 
+const selfHostingTroubleshooting = [
+  {
+    issue: "CLI points to wrong API",
+    fix: "Set CODEHUB_API_URL to your deployed server API endpoint.",
+    command: "export CODEHUB_API_URL=https://your-server/api",
+  },
+];
+
 function CommandBlock({ children }) {
   return (
     <pre className="docs-command-block">
@@ -152,17 +155,12 @@ export default function DocsPage({ onClose }) {
       <header className="docs-pro-hero">
         <div className="docs-pro-hero-left">
           <p className="docs-pro-eyebrow">CodeHub Documentation</p>
-          <h1>Professional User Guide</h1>
+          <h1>User Guide</h1>
           <p>
             This documentation is designed for end users first. You only need
             the CLI and your CodeHub account to work with repositories.
             Self-hosting details are included separately as an optional appendix.
           </p>
-          <div className="docs-pro-meta-row">
-            <span>User docs</span>
-            <span>CLI first</span>
-            <span>Self-hosting optional</span>
-          </div>
         </div>
         <div className="docs-pro-hero-right">
           {onClose && (
@@ -225,7 +223,11 @@ export default function DocsPage({ onClose }) {
           <section id="cli-reference" className="docs-pro-section">
             <h2>CLI Reference</h2>
             <p>
-              Install from the cli directory once:
+              Install globally from npm:
+            </p>
+            <CommandBlock>npm install -g @jay_shah/codehub-cli</CommandBlock>
+            <p>
+              Local development install from source:
             </p>
             <CommandBlock>cd cli && npm install -g .</CommandBlock>
             <div className="docs-pro-table-wrap">
@@ -325,6 +327,16 @@ export default function DocsPage({ onClose }) {
                   ))}
                 </tbody>
               </table>
+            </div>
+            <h3>Self-Hosting Troubleshooting</h3>
+            <div className="docs-pro-troubleshoot-grid">
+              {selfHostingTroubleshooting.map((item) => (
+                <article key={item.issue} className="docs-pro-troubleshoot-card">
+                  <h3>{item.issue}</h3>
+                  <p>{item.fix}</p>
+                  <CommandBlock>{item.command}</CommandBlock>
+                </article>
+              ))}
             </div>
           </section>
         </main>

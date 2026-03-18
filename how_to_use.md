@@ -10,7 +10,13 @@ The CodeHub CLI allows you to interact with your repositories, push code, and ma
 
 ### 1. Installation
 
-If you have downloaded the project source code, you can install the CLI globally on your machine using npm:
+You can install the CLI directly from npm (recommended):
+
+```bash
+npm install -g @jay_shah/codehub-cli
+```
+
+If you have downloaded the project source code and want to install from local files, use:
 
 ```bash
 # Navigate to the cli folder inside the project
@@ -24,6 +30,18 @@ Once installed, you can verify it by running:
 ```bash
 codehub --version
 ```
+
+### 1.1 Publishing the CLI to npm (Maintainers)
+
+If you are publishing a new CLI release:
+
+```bash
+cd cli
+npm version patch
+npm publish
+```
+
+If your npm account requires one-time verification, npm will prompt for OTP during publish.
 
 ### 2. Configuration & Environment
 

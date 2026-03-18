@@ -1,11 +1,14 @@
 {
-  "name": "codehub-cli",
+  "name": "@jay_shah/codehub-cli",
   "version": "1.0.0",
   "description": "CLI for CodeHub",
   "main": "bin/codehub.js",
   "type": "module",
   "bin": {
     "codehub": "./bin/codehub.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

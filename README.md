@@ -21,6 +21,21 @@ npm run dev
 - React dev server: `http://localhost:5173`
 - API server: `http://localhost:5080`
 
+## CLI Installation
+
+Install the published CLI package:
+
+```bash
+npm install -g @jay_shah/codehub-cli
+```
+
+Local development install from source:
+
+```bash
+cd cli
+npm install -g .
+```
+
 ## Frontend Features
 
 - Login and signup
