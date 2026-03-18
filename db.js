@@ -8,12 +8,14 @@ function resolveOracleLibDir() {
     const configured = [
         process.env.INSTANT_CLIENT_PATH,
         process.env.ORACLE_CLIENT_LIB_DIR,
-        process.env.ORACLE_HOME ? path.join(process.env.ORACLE_HOME, 'lib') : undefined
+        process.env.ORACLE_HOME ? path.join(process.env.ORACLE_HOME, 'lib') : undefined,
+        path.join(process.cwd(), '.render', 'oracle'),
+        '/opt/render/project/src/.render/oracle'
     ].filter(Boolean);
 
     const defaults = process.platform === 'darwin'
         ? ['/usr/local/lib', '/opt/homebrew/lib']
-        : ['/opt/render/project/src/.render/oracle/instantclient_23_8'];
+        : [];
 
     const candidates = [...configured, ...defaults];
     for (const dir of candidates) {
@@ -43,6 +45,11 @@ function resolveOracleLibDir() {
 try {
     const libDir = resolveOracleLibDir();
     if (libDir) {
+        if (process.platform === 'linux') {
+            process.env.LD_LIBRARY_PATH = process.env.LD_LIBRARY_PATH
+                ? `${libDir}:${process.env.LD_LIBRARY_PATH}`
+                : libDir;
+        }
         oracledb.initOracleClient({ libDir });
     } else {
         oracledb.initOracleClient();

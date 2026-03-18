@@ -4,11 +4,12 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build && node server.js",
+    "start": "node server.js",
     "server": "node server.js",
     "client": "vite",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "build": "vite build",
+    "render:build": "bash ./render-native-build.sh",
     "preview": "vite preview"
   },
   "keywords": [],
