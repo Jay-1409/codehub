@@ -3,7 +3,7 @@ services:
     name: dbms-project
     env: node
     buildCommand: npm run render:build
-    startCommand: bash -lc 'export LD_LIBRARY_PATH="${INSTANT_CLIENT_PATH}:${LD_LIBRARY_PATH:-}"; node server.js'
+    startCommand: npm start
     envVars:
       - key: DB_USER
         sync: false

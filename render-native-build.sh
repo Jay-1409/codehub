@@ -3,8 +3,8 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ORACLE_DIR="$ROOT_DIR/.render/oracle"
-ZIP_URL="https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-basiclite-linux.x64-23.8.0.25.04.zip"
-ZIP_PATH="$ORACLE_DIR/instantclient-basiclite.zip"
+ZIP_URL="https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-basic-linux.x64-23.8.0.25.04.zip"
+ZIP_PATH="$ORACLE_DIR/instantclient-basic.zip"
 STABLE_LINK="$ORACLE_DIR/instantclient"
 
 mkdir -p "$ORACLE_DIR"
@@ -41,6 +41,12 @@ fi
 
 echo "Oracle Instant Client path: $STABLE_LINK"
 ls -1 "$STABLE_LINK" | grep -E "^lib(clntsh|nnz)" || true
+
+if [ ! -f "$STABLE_LINK/libclntsh.so" ] || [ ! -f "$STABLE_LINK/libnnz.so" ]; then
+  echo "Oracle client libs missing after setup. Found:"
+  ls -la "$STABLE_LINK"
+  exit 1
+fi
 
 npm ci
 npm run build
