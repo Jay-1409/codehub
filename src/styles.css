@@ -122,6 +122,18 @@ body.dark-mode {
     --accent-light: #201c17;
     --accent-glow: rgba(58, 50, 40, 0.18);
 
+    /* Cream & Blue variable maps to ensure other cards/pills inherit dark mode */
+    --cream-50: #201c17;
+    --cream-100: #252018;
+    --cream-200: #2e2820;
+    --cream-300: #3a3228;
+
+    --blue-50: #201c17;
+    --blue-100: #252018;
+    --blue-200: #2e2820;
+    --blue-300: #3a3228;
+    --blue-400: #8a7f6e;
+
     --shadow-xs: 0 1px 2px rgba(5, 3, 1, 0.6);
     --shadow-sm: 0 2px 6px rgba(5, 3, 1, 0.7), 0 1px 2px rgba(5, 3, 1, 0.5);
     --shadow-md: 0 4px 16px rgba(5, 3, 1, 0.8), 0 2px 6px rgba(5, 3, 1, 0.6);
@@ -143,6 +155,42 @@ body.dark-mode::before {
         rgba(8, 5, 2, 0.55) 75%,
         rgba(5, 3, 1, 0.8) 100%
     );
+}
+
+[data-theme="dark"] .bg-orb,
+.dark .bg-orb,
+body.dark-mode .bg-orb {
+    opacity: 0 !important;
+    display: none !important;
+}
+
+[data-theme="dark"] .overview-card,
+.dark .overview-card,
+body.dark-mode .overview-card {
+    background: var(--bg-card-solid) !important;
+    border-color: var(--border-light) !important;
+}
+
+[data-theme="dark"] .repo-header,
+.dark .repo-header,
+body.dark-mode .repo-header,
+[data-theme="dark"] .action-card-header,
+.dark .action-card-header,
+body.dark-mode .action-card-header,
+[data-theme="dark"] .modal-header,
+.dark .modal-header,
+body.dark-mode .modal-header,
+[data-theme="dark"] .section-tab,
+.dark .section-tab,
+body.dark-mode .section-tab {
+    background: var(--bg-sidebar) !important;
+    border-bottom-color: var(--border-light) !important;
+}
+
+[data-theme="dark"] .app-shell,
+.dark .app-shell,
+body.dark-mode .app-shell {
+    background: transparent !important;
 }
 
 /* ── Reset & Base ── */
@@ -516,7 +564,7 @@ select:focus,
 textarea:focus {
     border-color: var(--blue-400);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
-    background: #ffffff;
+    background: var(--bg-card-solid);
 }
 
 select {
@@ -1394,7 +1442,7 @@ textarea {
     overflow: auto;
     border: 1px solid var(--border-light);
     border-radius: var(--radius-sm);
-    background: white;
+    background: var(--bg-card-solid);
     padding: 0.75rem;
 }
 
@@ -1477,7 +1525,7 @@ textarea {
     padding: 0.45rem 0.6rem;
     border: 1px solid var(--border-light);
     border-radius: var(--radius-sm);
-    background: white;
+    background: var(--bg-card-solid);
     transition:
         border-color var(--transition),
         box-shadow var(--transition);
@@ -1540,7 +1588,7 @@ textarea {
     padding: 0.65rem 0.75rem;
     border: 1px solid var(--border-light);
     border-radius: var(--radius-sm);
-    background: white;
+    background: var(--bg-card-solid);
     transition: all var(--transition);
 }
 
@@ -1623,7 +1671,7 @@ textarea {
     padding: 0.35rem 0.5rem;
     border: 1px solid var(--border-light);
     border-radius: 6px;
-    background: white;
+    background: var(--bg-card-solid);
     color: var(--text-primary);
     font-size: 0.75rem;
     font-family: var(--font-body);
@@ -1691,7 +1739,7 @@ textarea {
     padding: 0.65rem 0.75rem;
     border: 1px solid var(--border-light);
     border-radius: var(--radius-sm);
-    background: white;
+    background: var(--bg-card-solid);
     transition: all var(--transition);
 }
 
@@ -1794,7 +1842,7 @@ textarea {
     padding: 0.5rem 0.65rem;
     border: 1px solid var(--border-light);
     border-radius: var(--radius-sm);
-    background: white;
+    background: var(--bg-card-solid);
     transition: all var(--transition);
 }
 
@@ -1853,7 +1901,7 @@ textarea {
     padding-left: calc(0.65rem + (var(--tree-depth) * 1rem));
     border: 1px solid var(--border-light);
     border-radius: var(--radius-sm);
-    background: white;
+    background: var(--bg-card-solid);
     transition: all var(--transition);
     text-align: left;
 }
@@ -1939,7 +1987,7 @@ textarea {
     padding: 0.65rem 0.75rem;
     border: 1px solid var(--border-light);
     border-radius: var(--radius-sm);
-    background: white;
+    background: var(--bg-card-solid);
     transition: all var(--transition);
 }
 
@@ -2180,7 +2228,7 @@ textarea {
     padding: 0.38rem 0.55rem;
     border: 1px solid var(--border-light);
     border-radius: var(--radius-sm);
-    background: white;
+    background: var(--bg-card-solid);
     font-size: 0.77rem;
     font-family: var(--font-mono);
     color: var(--text-primary);
@@ -2385,7 +2433,7 @@ textarea {
     height: 30px;
     border-radius: 50%;
     border: 1px solid var(--border-mid);
-    background: white;
+    background: var(--bg-card-solid);
     color: var(--text-secondary);
     font-size: 0.75rem;
     cursor: pointer;
