@@ -1,8 +1,9 @@
 services:
   - type: web
     name: dbms-project
-    env: docker
-    dockerfilePath: ./Dockerfile
+    env: node
+    buildCommand: bash ./render-native-build.sh
+    startCommand: node server.js
     envVars:
       - key: DB_USER
         sync: false
@@ -10,5 +11,7 @@ services:
         sync: false
       - key: DB_CONNECTSTRING
         sync: false
+      - key: INSTANT_CLIENT_PATH
+        value: /opt/render/project/src/.render/oracle/instantclient_23_8
       - key: NODE_ENV
         value: production
