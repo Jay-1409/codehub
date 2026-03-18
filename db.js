@@ -4,84 +4,48 @@ const oracledb = require('oracledb');
 require('dotenv').config();
 
 function resolveOracleLibDir() {
-    const isMac = process.platform === 'darwin';
-    const hasClientLib = (dir) => {
-        if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory()) return false;
-
-        const files = fs.readdirSync(dir);
-        if (isMac) {
-            return files.some((name) => name === 'libclntsh.dylib' || name.startsWith('libclntsh.dylib.'));
-        }
-
-        return files.some((name) => name === 'libclntsh.so' || name.startsWith('libclntsh.so.'));
-    };
-
     const configured = [
         process.env.INSTANT_CLIENT_PATH,
         process.env.ORACLE_CLIENT_LIB_DIR,
         process.env.ORACLE_HOME ? path.join(process.env.ORACLE_HOME, 'lib') : undefined,
-        path.join(process.cwd(), '.render', 'oracle', 'instantclient'),
-        path.join(process.cwd(), '.render', 'oracle'),
-        '/opt/render/project/src/.render/oracle/instantclient',
-        '/opt/render/project/src/.render/oracle'
+        '/opt/oracle/instantclient'
     ].filter(Boolean);
 
-    const defaults = process.platform === 'darwin'
-        ? ['/usr/local/lib', '/opt/homebrew/lib']
-        : [];
+    const libNames = process.platform === 'darwin'
+        ? ['libclntsh.dylib', 'libclntsh.dylib.']
+        : ['libclntsh.so', 'libclntsh.so.'];
 
-    const candidates = [...configured, ...defaults];
+    const candidates = [...configured];
     for (const dir of candidates) {
         const normalized = path.resolve(dir);
-        if (hasClientLib(normalized)) {
-            return normalized;
+        if (!fs.existsSync(normalized) || !fs.statSync(normalized).isDirectory()) {
+            continue;
         }
 
-        if (fs.existsSync(normalized) && fs.statSync(normalized).isDirectory()) {
-            const child = fs.readdirSync(normalized)
-                .map((name) => path.join(normalized, name))
-                .find((childPath) =>
-                    fs.existsSync(childPath)
-                    && fs.statSync(childPath).isDirectory()
-                    && path.basename(childPath).startsWith('instantclient_')
-                    && hasClientLib(childPath)
-                );
-            if (child) return child;
+        const files = fs.readdirSync(normalized);
+        const hasClientLib = files.some((name) =>
+            libNames.some((prefix) => name === prefix || name.startsWith(prefix))
+        );
+        if (hasClientLib) {
+            return normalized;
         }
     }
 
     return undefined;
 }
 
-const oracleDriverMode = (process.env.ORACLE_DRIVER_MODE || 'thin').toLowerCase();
-
-// Prefer thick mode when available, but don't crash startup in auto mode.
-if (oracleDriverMode !== 'thin') {
-    try {
-        const libDir = resolveOracleLibDir();
-        if (libDir) {
-            process.env.INSTANT_CLIENT_PATH = libDir;
-            oracledb.initOracleClient({ libDir });
-            console.log(`Oracle driver mode: thick (${libDir})`);
-        } else if (oracleDriverMode === 'thick') {
-            oracledb.initOracleClient();
-            console.log('Oracle driver mode: thick (system library path)');
-        } else {
-            console.warn('Oracle Instant Client not found. Falling back to thin mode.');
-        }
-    } catch (err) {
-        const isClientLibError = err && err.code === 'DPI-1047';
-        if (!isClientLibError) {
-            console.error('Thick mode initialization error. Ensure Oracle Instant Client is installed.');
-            console.error('Download from: https://www.oracle.com/database/technologies/instant-client/downloads.html');
-            console.error('Set INSTANT_CLIENT_PATH to the folder containing libclntsh.*');
-            throw err;
-        }
-
-        // On Render native runtimes, missing native deps (e.g. libaio/libnnz) are common.
-        // Do not crash process startup; continue with thin mode.
-        console.warn(`Oracle driver fallback to thin mode: ${err.message}`);
+try {
+    const libDir = resolveOracleLibDir();
+    if (!libDir) {
+        throw new Error('Oracle Instant Client not found. Expected at INSTANT_CLIENT_PATH/ORACLE_CLIENT_LIB_DIR or /opt/oracle/instantclient');
     }
+
+    process.env.INSTANT_CLIENT_PATH = libDir;
+    oracledb.initOracleClient({ libDir });
+    console.log(`Oracle driver mode: thick (${libDir})`);
+} catch (err) {
+    console.error('Thick mode initialization error. Docker image must contain Oracle Instant Client and Linux deps.');
+    throw err;
 }
 
 // Ensure Oracle CLOB columns are returned as plain strings.

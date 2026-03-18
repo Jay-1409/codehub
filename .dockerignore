@@ -1,0 +1,13 @@
+.git
+.github
+.vscode
+node_modules
+npm-debug.log*
+Dockerfile*
+render-native-build.sh
+render-start.sh
+.env
+.env.*
+!.env.example
+my-new-repo-fork-forkeed
+my-test-project
